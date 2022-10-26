@@ -1,37 +1,33 @@
 package stepDefinitions;
 
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
-import org.openqa.selenium.By;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.Assert;
 import pageObjects.LandingPage;
 import utils.TestContextSetup;
 
 public class LandingPageStepDefinition {
-
-//public String productNameLandingPage;
-
     TestContextSetup testcontextsetup;
+    LandingPage landingPage;
 
     public LandingPageStepDefinition(TestContextSetup testcontextsetup) {
         this.testcontextsetup =testcontextsetup;
+       this.landingPage = testcontextsetup.pageObjectManager.getLandingPage();
     }
 
 
     @Given("^user is on GreenKart landing page$")
     public void user_is_on_greenkart_landing_page() throws Throwable {
-        System.setProperty("webdriver.chrome.driver", "/Users/azima.keshwani/Documents/chromeDriver/chromedriver.exe");
-        testcontextsetup.driver = new ChromeDriver();
-        testcontextsetup.driver.get("https://rahulshettyacademy.com/seleniumPractise/#/");
+    Assert.assertTrue(landingPage.getTitleLandingPage().contains("GreenKart"));
 
     }
 
-    @When("user searched with shortname {string} and extract actual name of product")
+    @When("^user searched with shortname (.+) and extract actual name of product$")
     public void user_searched_with_shortname_something_and_extract_actual_name_of_product(String shortname) throws Throwable {
-        LandingPage landingPage = new LandingPage(testcontextsetup.driver);
-        landingPage.searchItem(shortname);
 
-        //testcontextsetup.driver.findElement(By.xpath("//input[@type='search']")).sendKeys(shortname);
+        landingPage.searchItem(shortname);
 Thread.sleep(4000);
 landingPage.getSearchText();
 landingPage.getProductName();
@@ -39,6 +35,12 @@ landingPage.getProductName();
        System.out.println(testcontextsetup.productNameLandingPage + " extracted from homepage");
 
 
+    }
+
+    @And("^added \"([^\"]*)\" items of the selected product to cart$")
+    public void added_something_items_of_the_selected_product_to_cart(String quantity) throws Throwable {
+landingPage.incrementQuantity(Integer.parseInt(quantity));
+landingPage.setAddToCart();
     }
 
 }

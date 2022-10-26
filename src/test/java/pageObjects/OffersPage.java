@@ -9,6 +9,7 @@ public WebDriver driver;
 By SearchEditBox =    By.xpath("//input[@type='search']");
 By productName = (By.cssSelector("tr td:nth-child(1)"));
 
+
     public OffersPage(WebDriver driver) {
        this.driver=driver;
     }
@@ -21,6 +22,8 @@ public String getSearchText(){
   return driver.findElement(productName).getText();
 
 }
+
+
 
 
 
